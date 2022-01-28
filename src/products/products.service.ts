@@ -18,7 +18,7 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productRepository.createQueryBuilder('product').getMany();
+    return this.productRepository.createQueryBuilder('product').select(['product']).getMany();
   }
 
   findOne(id: number) {
