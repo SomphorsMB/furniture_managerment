@@ -3,6 +3,8 @@ import 'dotenv/config'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
+import { ProductSuppliersModule } from './product-suppliers/product-suppliers.module';
+import { ProductSupplier } from './product-suppliers/entities/product-supplier.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -12,9 +14,10 @@ import { User } from './users/entities/user.entity';
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
+    timezone: process.env.DB_Time,
     synchronize: true,
-    entities: [User],
-  }), UsersModule],
+    entities: [User, ProductSupplier],
+  }), UsersModule, ProductSuppliersModule],
   controllers: [],
   providers: [],
 })
