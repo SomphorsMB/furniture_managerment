@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
 import { ProductSuppliersService } from './product-suppliers.service';
 import { CreateProductSupplierDto } from './dto/create-product-supplier.dto';
 import { UpdateProductSupplierDto } from './dto/update-product-supplier.dto';
@@ -11,20 +11,29 @@ export class ProductSuppliersController {
   @Post()
   create(@Body() createProductSupplierDto: CreateProductSupplierDto, @Res() res: Response) {
     this.productSuppliersService.create(createProductSupplierDto).then(result => {
-        res.status(200).json({
+        res.status(201).json({
           message: "Created Sucessfully"
         })
     }).catch(error => {
       res.status(500).json({
         message: "Something went wrong",
-        post: error
+        error: error
       });
     });
   }
 
   @Get()
-  findAll() {
-    return this.productSuppliersService.findAll();
+  findAll( @Res() res: Response) {
+    return this.productSuppliersService.findAll().then(result => {
+      res.status(200).json({
+        data: result
+      })
+    }).catch(error=> {
+      res.status(500).json({
+        message: "Something went wrong",
+        error: error
+      });
+    });;
   }
 
   @Get(':id')
@@ -37,10 +46,10 @@ export class ProductSuppliersController {
             message: "Product_Supplier not found!"
         });
     }
-    }).catch(err => {
+    }).catch(error => {
       res.status(500).json({
           message: "Something went wrong!",
-          error: err
+          error: error
       })
   });
   }
@@ -49,7 +58,7 @@ export class ProductSuppliersController {
   update(@Param('id') id: string, @Body() updateProductSupplierDto: UpdateProductSupplierDto, @Res() res: Response) {
     this.productSuppliersService.findOne(+id).then(result => {
       if (result){
-        this.productSuppliersService.update(+id, updateProductSupplierDto).then(supplier => {
+        this.productSuppliersService.update(+id, updateProductSupplierDto).then(() => {
           res.status(201).json({
             message: "Updated Successfully"
           })

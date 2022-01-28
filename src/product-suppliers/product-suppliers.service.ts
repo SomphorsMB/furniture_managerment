@@ -18,22 +18,22 @@ export class ProductSuppliersService {
   }
 
   findAll() {
-    return `This action returns a #} productSupplier`;
+    return this.supplierRepository.createQueryBuilder('supplier')
+    .select(['supplier'])
+    .getMany();
   }
 
   findOne(id: number) {
-    return this.supplierRepository.createQueryBuilder('supplier').select(['supplier']).where('supplier.id = :id', { id: id}).getOne();
+    return this.supplierRepository.createQueryBuilder('supplier')
+    .select(['supplier'])
+    .where('supplier.id = :id', { id: id})
+    .getOne();
   }
 
   update(id: number, updateProductSupplierDto: UpdateProductSupplierDto) {
-    // const time = new Date(Date.now()).toLocaleString();
-    const time = new Date().toLocaleTimeString().split(' ')[0];
-    const date = new Date().toISOString().split('T')[0];
-    const dateTime = date+"T"+ time+ '.000z'
-
     return this.supplierRepository.createQueryBuilder()
     .update(new UpdateProductSupplierDto)
-    .set({ ...updateProductSupplierDto, updated_at: dateTime })
+    .set({ ...updateProductSupplierDto })
     .where("id = :id", { id: id })
     .execute();
     
