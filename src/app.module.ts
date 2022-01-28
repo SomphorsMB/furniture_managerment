@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import 'dotenv/config'
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -11,8 +13,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
     synchronize: true,
-    entities: [],
-  })],
+    entities: [Category],
+  }), CategoriesModule],
   controllers: [],
   providers: [],
 })
