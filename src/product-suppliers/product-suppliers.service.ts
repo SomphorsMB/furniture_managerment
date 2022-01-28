@@ -18,7 +18,7 @@ export class ProductSuppliersService {
   }
 
   findAll() {
-    return `This action returns a #} productSupplier`;
+    return this.supplierRepository.createQueryBuilder('supplier').select(['supplier']).getMany();
   }
 
   findOne(id: number) {
