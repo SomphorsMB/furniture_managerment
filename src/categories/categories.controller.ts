@@ -14,7 +14,7 @@ export class CategoriesController {
     if(isCategoryExist) {
       return res.status(409).json({message:'Category already exist!'});
     }else {
-      this.categoriesService.create(createCategoryDto).then(result =>{
+      this.categoriesService.create(createCategoryDto).then(() =>{
         return res.status(201).json({message:'Category created successfully!'});
       }).catch(error=>{
           return res.status(500).json({
@@ -73,7 +73,7 @@ export class CategoriesController {
   removeCategory(@Param('id',ParseIntPipe) id: string,@Res() res:Response) {
     this.categoriesService.findOne(+id).then(result=>{
       if(result){
-        this.categoriesService.remove(+id).then(category=>{
+        this.categoriesService.remove(+id).then(()=>{
           return res.status(201).json({message:'Deleted category successfully!'});
         }).catch(error=>{
           return res.status(500).json({
