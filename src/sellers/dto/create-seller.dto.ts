@@ -1,27 +1,27 @@
-import { IsNotEmpty, IsNumberString, MaxLength, MinLength } from "class-validator";
+import { IsMobilePhone, IsNotEmpty, IsNumberString, MaxLength, MinLength } from "class-validator";
 
 export class CreateSellerDto {
     @IsNotEmpty()
     @MinLength(2)
     @MaxLength(20)
-    firstName:string;
+    readonly firstName:string;
 
     @IsNotEmpty()
     @MinLength(2)
     @MaxLength(20)
-    lastName:string;
+    readonly lastName:string;
 
     @IsNotEmpty()
-    gender:string;
+    readonly gender:string;
 
     @IsNotEmpty()
-    @IsNumberString()
     @MinLength(9)
     @MaxLength(10)
-    phone:string;
+    @IsMobilePhone()
+    readonly phone:string;
     
     @IsNotEmpty()
     @MinLength(10)
-    address:string;
+    readonly address:string;
 
 }

@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { Repository } from 'typeorm';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 import { Seller } from './entities/seller.entity';
+import { SellerRepository } from './sellers.repository';
 
 @Injectable()
 export class SellersService {
 
-  constructor(@InjectRepository(Seller) private readonly sellerRepository:Repository<Seller>){}
+  constructor(private readonly _sellerRepository:SellerRepository){}
 
   create(createSellerDto: CreateSellerDto) {
-    return this.sellerRepository
+    return this._sellerRepository
         .createQueryBuilder()
         .insert()
         .values({...createSellerDto})
@@ -20,13 +18,13 @@ export class SellersService {
   }
 
   findAll() {
-    return this.sellerRepository
+    return this._sellerRepository
     .createQueryBuilder()
     .getMany();
   }
 
   findOne(id: number) {
-    return this.sellerRepository
+    return this._sellerRepository
       .createQueryBuilder('seller')
       .select(['seller'])
       .where('seller.id=:id',{id:id})
@@ -34,7 +32,7 @@ export class SellersService {
   }
 
   update(id: number, updateSellerDto: UpdateSellerDto) {
-    return this.sellerRepository.createQueryBuilder()
+    return this._sellerRepository.createQueryBuilder()
     .update(new UpdateSellerDto)
     .set({...updateSellerDto})
     .where("id=:id",{id:id})
@@ -42,15 +40,15 @@ export class SellersService {
   }
 
   remove(id: number) {
-    return this.sellerRepository.createQueryBuilder()
+    return this._sellerRepository.createQueryBuilder()
       .delete()
       .from(Seller)
       .where('id=:id',{id:id})
       .execute();
   }
 
-  checkSeller(seller:CreateSellerDto){
-    return this.sellerRepository
+  checkSeller(seller:UpdateSellerDto){
+    return this._sellerRepository
           .createQueryBuilder()
           .select()
           .andWhere('firstName=:firstName',{firstName:seller.firstName})
@@ -63,7 +61,7 @@ export class SellersService {
   }
 
   checkPhone(phone:string){
-    return this.sellerRepository
+    return this._sellerRepository
           .createQueryBuilder()
           .select()
           .where('phone=:phone',{phone:phone})
