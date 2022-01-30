@@ -23,12 +23,12 @@ export class ProductsController {
 
   @Get()
   findAll(@Res() res:Response) {
-    return this.productsService.findAll().then(result => {
-      res.status(200).json({
+    this.productsService.findAll().then(result => {
+      return res.status(200).json({
         data: result
       })
     }).catch(error=> {
-      res.status(500).json({
+      return res.status(500).json({
         message: "Something went wrong",
       });
     });

@@ -61,7 +61,7 @@ export class SellersController {
         }else if(isPhoneExist){
           return res.status(409).json({message:'Phone number already exist!'});
         }else{
-          this.sellersService.update(+id,updateSellerDto).then(category=>{
+          this.sellersService.update(+id,updateSellerDto).then(()=>{
             return res.status(201).json({message:'Updated seller successfully!'});
           }).catch(error=>{
             return res.status(500).json({

@@ -16,7 +16,6 @@ export class CreateSellerDto {
 
     @IsNotEmpty()
     @IsNumberString()
-
     @MinLength(9)
     @MaxLength(10)
     phone:string;

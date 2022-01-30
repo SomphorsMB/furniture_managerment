@@ -11,6 +11,8 @@ import { ProductsModule } from './products/products.module';
 import { Product } from './products/entities/product.entity';
 import { SellersModule } from './sellers/sellers.module';
 import { Seller } from './sellers/entities/seller.entity';
+import { ProductSoldsModule } from './product-solds/product-solds.module';
+import { ProductSold } from './product-solds/entities/product-sold.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -22,8 +24,8 @@ import { Seller } from './sellers/entities/seller.entity';
     database: process.env.DB_NAME,
     timezone: process.env.DB_Time,
     synchronize: true,
-    entities: [User, ProductSupplier, Product,Category,Seller],
-  }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule],
+    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold],
+  }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule],
   controllers: [],
   providers: [],
 })
