@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { CategoryRepository } from './categories.repository';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 
 @Injectable()
 export class CategoriesService {
-  constructor(@InjectRepository(Category) private readonly categoryRepository:Repository<Category>){}
+  constructor(private readonly _categoryRepository:CategoryRepository){}
 
   create(createCategoryDto: CreateCategoryDto){
-    return this.categoryRepository
+    return this._categoryRepository
           .createQueryBuilder()
           .insert()
           .values({...createCategoryDto})
@@ -18,13 +17,13 @@ export class CategoriesService {
   }
 
   findAll() {
-    return this.categoryRepository
+    return this._categoryRepository
           .createQueryBuilder()
           .getMany();
   }
 
   findOne(id: number) {
-    return this.categoryRepository
+    return this._categoryRepository
           .createQueryBuilder('category')
           .select(['category'])
           .where('category.id=:id',{id:id})
@@ -32,7 +31,7 @@ export class CategoriesService {
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto):Promise<any> {
-    return this.categoryRepository.createQueryBuilder()
+    return this._categoryRepository.createQueryBuilder()
           .update(new UpdateCategoryDto)
           .set({...updateCategoryDto})
           .where("id=:id",{id:id})
@@ -40,7 +39,7 @@ export class CategoriesService {
   }
 
   remove(id: number){
-    return this.categoryRepository.createQueryBuilder()
+    return this._categoryRepository.createQueryBuilder()
           .delete()
           .from(Category)
           .where('id=:id',{id:id})
@@ -48,7 +47,7 @@ export class CategoriesService {
   }
 
   checkCategory(name:string){
-    return this.categoryRepository
+    return this._categoryRepository
           .createQueryBuilder()
           .select()
           .where('name=:name',{name:name})

@@ -4,5 +4,5 @@ export class CreateCategoryDto {
     @IsNotEmpty()
     @MinLength(2)
     @MaxLength(20)
-    name:string;
+    readonly name:string;
 }
