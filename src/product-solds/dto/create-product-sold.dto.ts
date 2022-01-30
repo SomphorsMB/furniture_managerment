@@ -4,13 +4,13 @@ export class CreateProductSoldDto {
     
     @IsNotEmpty()
     @IsNumberString()
-    seller:number
+    readonly seller:number
 
     @IsNotEmpty()
     @IsNumberString()
-    product:number
+    readonly product:number
 
     @IsNotEmpty()
     @IsNumberString()
-    unit:number
+    readonly unit:number
 }

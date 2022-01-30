@@ -4,12 +4,13 @@ import { Repository } from 'typeorm';
 import { CreateProductSoldDto } from './dto/create-product-sold.dto';
 import { UpdateProductSoldDto } from './dto/update-product-sold.dto';
 import { ProductSold } from './entities/product-sold.entity';
+import { ProductSoldsRepository } from './product-solds.repository';
 
 @Injectable()
 export class ProductSoldsService {
-  constructor(@InjectRepository(ProductSold) private readonly productSoldRepository:Repository<ProductSold>){}
+  constructor(private readonly _productSoldRepository:ProductSoldsRepository){}
   create(createProductSoldDto: CreateProductSoldDto) {
-    return this.productSoldRepository
+    return this._productSoldRepository
       .createQueryBuilder()
       .insert()
       .values({...createProductSoldDto})
@@ -17,13 +18,13 @@ export class ProductSoldsService {
   }
 
   findAll() {
-    return this.productSoldRepository
+    return this._productSoldRepository
       .createQueryBuilder()
       .getMany();
   }
 
   findOne(id: number) {
-    return this.productSoldRepository
+    return this._productSoldRepository
       .createQueryBuilder('productSold')
       .select('productSold')
       .where('productSold.id=:id',{id:id})
@@ -31,7 +32,7 @@ export class ProductSoldsService {
   }
 
   update(id: number, updateProductSoldDto: UpdateProductSoldDto) {
-    return this.productSoldRepository
+    return this._productSoldRepository
       .createQueryBuilder()
       .update()
       .set({...updateProductSoldDto})
@@ -40,7 +41,7 @@ export class ProductSoldsService {
   }
 
   remove(id: number) {
-    return this.productSoldRepository
+    return this._productSoldRepository
       .createQueryBuilder()
       .delete()
       .from(ProductSold)
