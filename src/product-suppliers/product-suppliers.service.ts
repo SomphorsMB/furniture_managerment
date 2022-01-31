@@ -23,7 +23,7 @@ export class ProductSuppliersService {
     .getMany();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.supplierRepository.createQueryBuilder('supplier')
     .select(['supplier'])
     .where('supplier.id = :id', { id: id})

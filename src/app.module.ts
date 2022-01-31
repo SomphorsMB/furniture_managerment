@@ -13,6 +13,9 @@ import { SellersModule } from './sellers/sellers.module';
 import { Seller } from './sellers/entities/seller.entity';
 import { ProductSoldsModule } from './product-solds/product-solds.module';
 import { ProductSold } from './product-solds/entities/product-sold.entity';
+import { ProductDetailsModule } from './product-details/product-details.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { ProductDetail } from './product-details/entities/product-detail.entity';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -24,8 +27,10 @@ import { ProductSold } from './product-solds/entities/product-sold.entity';
     database: process.env.DB_NAME,
     timezone: process.env.DB_Time,
     synchronize: true,
-    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold],
-  }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule],
+    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold,ProductDetail],
+  }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule, ProductDetailsModule,MulterModule.register({
+    dest:'./files',
+  })],
   controllers: [],
   providers: [],
 })

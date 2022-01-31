@@ -1,4 +1,4 @@
-import { IsMobilePhone, IsNotEmpty, IsNumberString, MaxLength, MinLength } from "class-validator";
+import { IsAlpha, IsMobilePhone, IsNotEmpty, IsNumberString, MaxLength, MinLength } from "class-validator";
 
 export class CreateSellerDto {
     @IsNotEmpty()
@@ -12,6 +12,7 @@ export class CreateSellerDto {
     readonly lastName:string;
 
     @IsNotEmpty()
+    @IsAlpha()
     readonly gender:string;
 
     @IsNotEmpty()

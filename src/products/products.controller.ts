@@ -72,6 +72,7 @@ export class ProductsController {
       });
       }
     })
+    
   }
 
   @Delete(':id')

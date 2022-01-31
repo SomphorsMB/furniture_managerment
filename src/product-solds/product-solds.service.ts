@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreateProductSoldDto } from './dto/create-product-sold.dto';
 import { UpdateProductSoldDto } from './dto/update-product-sold.dto';
 import { ProductSold } from './entities/product-sold.entity';
-import { ProductSoldsRepository } from './product-solds.repository';
+import { ProductSoldRepository } from './product-solds.repository';
 
 @Injectable()
 export class ProductSoldsService {
-  constructor(private readonly _productSoldRepository:ProductSoldsRepository){}
+  constructor(private readonly _productSoldRepository:ProductSoldRepository){}
   create(createProductSoldDto: CreateProductSoldDto) {
     return this._productSoldRepository
       .createQueryBuilder()
