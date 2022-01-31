@@ -1,17 +1,20 @@
 import { Module } from '@nestjs/common';
 import 'dotenv/config'
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { ProductSuppliersModule } from './product-suppliers/product-suppliers.module';
 import { ProductSupplier } from './product-suppliers/entities/product-supplier.entity';
 import { ProductsModule } from './products/products.module';
 import { Product } from './products/entities/product.entity';
-import { ProductDetailController } from './product-detail/product-detail.controller';
-import { ProductDetailService } from './product-detail/product-detail.service';
-import { ProductDetailModule } from './product-detail/product-detail.module';
-import { ProductDetailModule } from './product-detail/product-detail.module';
-import { ProductDetailModule } from './product-detail/product-detail.module';
+import { SellersModule } from './sellers/sellers.module';
+import { Seller } from './sellers/entities/seller.entity';
+import { ProductSoldsModule } from './product-solds/product-solds.module';
+import { ProductSold } from './product-solds/entities/product-sold.entity';
+import { AuthModule } from './auth/auth.module';
+
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -23,9 +26,9 @@ import { ProductDetailModule } from './product-detail/product-detail.module';
     database: process.env.DB_NAME,
     timezone: process.env.DB_Time,
     synchronize: true,
-    entities: [User, ProductSupplier, Product],
-  }), UsersModule, ProductSuppliersModule, ProductsModule, ProductDetailModule],
-  controllers: [ProductDetailController],
-  providers: [ProductDetailService],
+    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold],
+  }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule, AuthModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
