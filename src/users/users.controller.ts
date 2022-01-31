@@ -12,7 +12,7 @@ export class UsersController {
     (
       private readonly usersService: UsersService,
       private jwtService: JwtService
-    ) { }
+    ) {}
 
   @Post('register')
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -35,6 +35,7 @@ export class UsersController {
     if (!user) {
       throw new BadRequestException('Invalid credentials');
     }
+
     if (!await bcrypt.compare(password, user.password)) {
       throw new BadRequestException('Invalid credentials');
     }

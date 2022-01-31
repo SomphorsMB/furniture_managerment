@@ -7,6 +7,11 @@ import { ProductSuppliersModule } from './product-suppliers/product-suppliers.mo
 import { ProductSupplier } from './product-suppliers/entities/product-supplier.entity';
 import { ProductsModule } from './products/products.module';
 import { Product } from './products/entities/product.entity';
+import { ProductDetailController } from './product-detail/product-detail.controller';
+import { ProductDetailService } from './product-detail/product-detail.service';
+import { ProductDetailModule } from './product-detail/product-detail.module';
+import { ProductDetailModule } from './product-detail/product-detail.module';
+import { ProductDetailModule } from './product-detail/product-detail.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -19,8 +24,8 @@ import { Product } from './products/entities/product.entity';
     timezone: process.env.DB_Time,
     synchronize: true,
     entities: [User, ProductSupplier, Product],
-  }), UsersModule, ProductSuppliersModule, ProductsModule],
-  controllers: [],
-  providers: [],
+  }), UsersModule, ProductSuppliersModule, ProductsModule, ProductDetailModule],
+  controllers: [ProductDetailController],
+  providers: [ProductDetailService],
 })
 export class AppModule {}
