@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import { ProductRepository } from './products.repository';
 
 @Injectable()
 export class ProductsService {
-  constructor(@InjectRepository(Product) private readonly productRepository: Repository<Product>){}
+  constructor(private readonly _productRepository:ProductRepository){}
 
   create(createProductDto: CreateProductDto) {
-    return this.productRepository
+    return this._productRepository
       .createQueryBuilder()
       .insert()
       .values({ ...createProductDto})
@@ -18,18 +18,18 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productRepository.createQueryBuilder('product').select(['product']).getMany();
+    return this._productRepository.createQueryBuilder('product').select(['product']).getMany();
   }
 
   findOne(id: number) {
-    return this.productRepository.createQueryBuilder('product')
+    return this._productRepository.createQueryBuilder('product')
     .select(['product'])
     .where('product.id = :id', { id: id})
     .getOne();
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
-    return this.productRepository.createQueryBuilder()
+    return this._productRepository.createQueryBuilder()
     .update(new UpdateProductDto)
     .set({ ...updateProductDto })
     .where("id = :id", { id: id })
@@ -37,7 +37,7 @@ export class ProductsService {
   }
 
   remove(id: number) {
-    return this.productRepository.createQueryBuilder()
+    return this._productRepository.createQueryBuilder()
     .delete()
     .from(Product)
     .where("id = :id", { id: id })
