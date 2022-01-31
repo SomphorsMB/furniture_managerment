@@ -4,8 +4,10 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 export class Category {
     @PrimaryGeneratedColumn()
     id:number;
+
     @Column({unique:true})
     name:string;
+
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;
 

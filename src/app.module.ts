@@ -16,6 +16,10 @@ import { ProductSold } from './product-solds/entities/product-sold.entity';
 import { ProductDetailsModule } from './product-details/product-details.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ProductDetail } from './product-details/entities/product-detail.entity';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './authorization/role.guard';
+
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -28,7 +32,7 @@ import { ProductDetail } from './product-details/entities/product-detail.entity'
     timezone: process.env.DB_Time,
     synchronize: true,
     entities: [User, ProductSupplier, Product,Category,Seller,ProductSold,ProductDetail],
-  }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule, ProductDetailsModule,MulterModule.register({
+  }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule, ProductDetailsModule,AuthModule,MulterModule.register({
     dest:'./files',
   })],
   controllers: [],

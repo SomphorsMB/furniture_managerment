@@ -1,13 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpException, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpException, HttpStatus, Res, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/authorization/role.guard';
+import { Roles } from 'src/authorization/role.decorator';
+import { Role } from 'src/authorization/role.enum';
 
+@UseGuards(AuthGuard)
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Post('create')
   async createCategory(@Body() createCategoryDto: CreateCategoryDto, @Res() res:Response) {
     const isCategoryExist = await this.categoriesService.checkCategory(createCategoryDto.name);
@@ -24,6 +31,8 @@ export class CategoriesController {
     };
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
   @Get()
   findAllCategory(@Res() res:Response) {
     this.categoriesService.findAll().then(result=>{
@@ -33,6 +42,8 @@ export class CategoriesController {
     })
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
   @Get(':id')
   findOneCategory(@Param('id',ParseIntPipe) id: string,@Res() res:Response) {
     this.categoriesService.findOne(+id).then(result =>{
@@ -46,6 +57,8 @@ export class CategoriesController {
     });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Patch('update/:id')
   async updateCategory(@Param('id',ParseIntPipe) id: string, @Body() updateCategoryDto: UpdateCategoryDto,@Res() res:Response) {
     const isCategoryExist = await this.categoriesService.checkCategory(updateCategoryDto.name);
@@ -69,6 +82,8 @@ export class CategoriesController {
     });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Delete(':id')
   removeCategory(@Param('id',ParseIntPipe) id: string,@Res() res:Response) {
     this.categoriesService.findOne(+id).then(result=>{
@@ -85,6 +100,5 @@ export class CategoriesController {
         return res.status(404).json({message:'category not found!'});
       }
     });
-
   }
 }

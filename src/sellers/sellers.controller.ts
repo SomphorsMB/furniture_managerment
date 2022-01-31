@@ -1,13 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { SellersService } from './sellers.service';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/authorization/role.guard';
+import { Roles } from 'src/authorization/role.decorator';
+import { Role } from 'src/authorization/role.enum';
 
+
+@UseGuards(AuthGuard)
 @Controller('sellers')
 export class SellersController {
   constructor(private readonly sellersService: SellersService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Post('create')
   async createSeller(@Body() createSellerDto: CreateSellerDto, @Res() res:Response) {
     const isSellerExist = await this.sellersService.checkSeller(createSellerDto);
@@ -25,9 +33,10 @@ export class SellersController {
                   post:error});
         });
     }
-   
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
   @Get()
   findAllSeller(@Res() res:Response) {
     this.sellersService.findAll().then(result=>{
@@ -37,6 +46,8 @@ export class SellersController {
     })
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
   @Get(':id')
   findOneSeller(@Param('id',ParseIntPipe) id: string,@Res() res:Response) {
     this.sellersService.findOne(+id).then(result =>{
@@ -50,6 +61,8 @@ export class SellersController {
     });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Patch('update/:id')
   async updateSeller(@Param('id',ParseIntPipe) id: string, @Body() updateSellerDto: UpdateSellerDto,@Res() res:Response) {
     const isSellerExist = await this.sellersService.checkSeller(updateSellerDto);
@@ -70,13 +83,14 @@ export class SellersController {
             });
           });
         }
-        
       }else{
         return res.status(404).json({message:'Seller not found!'});
       }
     });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Delete(':id')
   removeSeller(@Param('id',ParseIntPipe) id: string,@Res() res:Response) {
     this.sellersService.findOne(+id).then(result=>{
@@ -93,7 +107,5 @@ export class SellersController {
         return res.status(404).json({message:'seller not found!'});
       }
     });
-
   }
-  
 }
