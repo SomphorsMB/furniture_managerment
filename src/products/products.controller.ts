@@ -4,12 +4,17 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/authorization/role.guard';
+import { Roles } from 'src/authorization/role.decorator';
+import { Role } from 'src/authorization/role.enum';
 
 @UseGuards(AuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Post()
   create(@Body() createProductDto: CreateProductDto, @Res() res:Response) {
     this.productsService.create(createProductDto).then(() => {
@@ -23,6 +28,8 @@ export class ProductsController {
     });
     }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
   @Get()
   findAll(@Res() res:Response) {
     this.productsService.findAll().then(result => {
@@ -36,6 +43,8 @@ export class ProductsController {
     });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
   @Get(':id')
   findOne(@Param('id') id: string, @Res() res:Response) {
     this.productsService.findOne(+id).then(result => {
@@ -54,6 +63,8 @@ export class ProductsController {
   });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @Res() res: Response) {
     this.productsService.findOne(+id).then(result => {
@@ -76,6 +87,8 @@ export class ProductsController {
     })
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Delete(':id')
   remove(@Param('id') id: string, @Res() res: Response) {
     this.productsService.findOne(+id).then(result => {
@@ -96,6 +109,5 @@ export class ProductsController {
       });
       }
     })
-
   }
 }

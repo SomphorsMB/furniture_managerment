@@ -14,6 +14,8 @@ import { Seller } from './sellers/entities/seller.entity';
 import { ProductSoldsModule } from './product-solds/product-solds.module';
 import { ProductSold } from './product-solds/entities/product-sold.entity';
 import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './authorization/role.guard';
 
 
 @Module({

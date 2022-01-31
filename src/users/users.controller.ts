@@ -5,6 +5,9 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Response, Request } from 'express';
 import { AuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/authorization/role.decorator';
+import { Role } from 'src/authorization/role.enum';
+import { RolesGuard } from 'src/authorization/role.guard';
 
 
 @Controller('users')
@@ -24,14 +27,16 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.MANAGER)
   @Get()
   async findAll() {
     return await this.usersService.findAll();
   }
 
   @Patch('update/:userId')
-  update(@Param('userId') userId: string, @Req() req: Request, @Res() res: Response) {
+  async update(@Param('userId') userId: string, @Req() req: Request, @Res() res: Response) {
+    req.body.password = await bcrypt.hash(req.body.password, 12);
     this.usersService.update(userId, req.body)
       .then(() => {
         res.status(200).json(
