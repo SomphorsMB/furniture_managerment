@@ -1,12 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards } from '@nestjs/common';
 import { DiscountService } from './discount.service';
 import { CreateDiscountDto } from './dto/create-discount.dto';
 import { UpdateDiscountDto } from './dto/update-discount.dto';
 import { Response } from 'express';
+import { Roles } from 'src/authorization/role.decorator';
+import { Role } from 'src/authorization/role.enum';
+import { RolesGuard } from 'src/authorization/role.guard';
 @Controller('discount')
 export class DiscountController {
   constructor(private readonly discountService: DiscountService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Post()
   create(@Body() createDiscountDto: CreateDiscountDto, @Res() res: Response) {
     this.discountService.create(createDiscountDto).then(result => {
@@ -21,6 +26,8 @@ export class DiscountController {
   });
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Get()
   findAll(@Res() res: Response) {
     this.discountService.findAll().then(result => {
@@ -35,6 +42,8 @@ export class DiscountController {
     });;
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Get(':id')
   findOne(@Param('id') id: string,@Res() res: Response) {
     this.discountService.findOne(+id).then(result => {
@@ -52,6 +61,9 @@ export class DiscountController {
       })
   })
 }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDiscountDto: UpdateDiscountDto, @Res() res: Response) {
     return this.discountService.update(+id, updateDiscountDto).then(() => {
@@ -66,6 +78,8 @@ export class DiscountController {
     })
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER)
   @Delete(':id')
   remove(@Param('id') id: string, @Res() res: Response) {
     this.discountService.findOne(+id).then(result => {

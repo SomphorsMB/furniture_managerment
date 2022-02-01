@@ -16,7 +16,7 @@ export class SellersController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
-  @Post('create')
+  @Post()
   async createSeller(@Body() createSellerDto: CreateSellerDto, @Res() res:Response) {
     const isSellerExist = await this.sellersService.checkSeller(createSellerDto);
     const isPhoneExist = await this.sellersService.checkPhone(createSellerDto.phone);
@@ -63,7 +63,7 @@ export class SellersController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
-  @Patch('update/:id')
+  @Patch(':id')
   async updateSeller(@Param('id',ParseIntPipe) id: string, @Body() updateSellerDto: UpdateSellerDto,@Res() res:Response) {
     const isSellerExist = await this.sellersService.checkSeller(updateSellerDto);
     const isPhoneExist = await this.sellersService.checkPhone(updateSellerDto.phone);
