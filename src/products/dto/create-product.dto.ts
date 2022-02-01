@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, MinLength } from "class-validator";
+import { Category } from "src/categories/entities/category.entity";
 
 export class CreateProductDto {
 
@@ -7,7 +8,7 @@ export class CreateProductDto {
     name: string;
 
     @IsNotEmpty()
-    @IsNumber()
-    category_id: number;
+    // @IsNumber()
+    category_id: Category;
 
 }
