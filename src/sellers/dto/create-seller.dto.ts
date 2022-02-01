@@ -1,4 +1,4 @@
-import { IsAlpha, IsMobilePhone, IsNotEmpty, IsNumberString, MaxLength, MinLength } from "class-validator";
+import { IsAlpha, IsMobilePhone, IsNotEmpty, MaxLength, MinLength } from "class-validator";
 
 export class CreateSellerDto {
     @IsNotEmpty()

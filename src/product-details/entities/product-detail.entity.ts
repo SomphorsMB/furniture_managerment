@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ProductSupplier } from "src/product-suppliers/entities/product-supplier.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ProductDetail {
@@ -7,9 +8,6 @@ export class ProductDetail {
 
     @Column()
     product:number
-
-    @Column()
-    productSupplier:number
 
     @Column()
     avatar:string
@@ -28,4 +26,9 @@ export class ProductDetail {
     
     @Column()
     price:number;
+
+
+    @ManyToOne(()=> ProductSupplier, productSupplier=> productSupplier.product_detail, {onDelete:'CASCADE'})
+    @JoinColumn()
+    supplier: ProductSupplier;
 }
