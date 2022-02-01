@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Product } from "src/products/entities/product.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class ProductSold {
@@ -8,8 +9,9 @@ export class ProductSold {
     @Column()
     seller:number
 
-    @Column()
-    product:number
+    @ManyToOne(()=> Product, product=> product.product_sold, {onDelete:'CASCADE'})
+    @JoinColumn()
+    product: Product;
 
     @Column()
     unit:number

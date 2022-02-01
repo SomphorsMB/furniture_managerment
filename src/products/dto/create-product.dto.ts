@@ -8,7 +8,7 @@ export class CreateProductDto {
     name: string;
 
     @IsNotEmpty()
-    // @IsNumber()
-    category_id: Category;
+    @IsNumber()
+    category: Category;
 
 }

@@ -1,14 +1,13 @@
 import { IsNotEmpty, IsNumberString, Min } from "class-validator"
+import { Product } from "src/products/entities/product.entity"
 
 export class CreateProductSoldDto {
     
     @IsNotEmpty()
-    @IsNumberString()
     readonly seller:number
 
     @IsNotEmpty()
-    @IsNumberString()
-    readonly product:number
+    readonly product: Product
 
     @IsNotEmpty()
     @IsNumberString()

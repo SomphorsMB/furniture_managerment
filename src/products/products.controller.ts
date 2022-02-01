@@ -19,6 +19,7 @@ export class ProductsController {
   create(@Body() createProductDto: CreateProductDto, @Res() res:Response) {
     this.productsService.create(createProductDto).then(() => {
         res.status(201).json({
+          message: "Product created succussfully"
         })
     }).catch(error => {
       res.status(500).json({
