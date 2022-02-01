@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/authorization/role.guard';
 import { Roles } from 'src/authorization/role.decorator';
 import { Role } from 'src/authorization/role.enum';
+import { Product } from './entities/product.entity';
 
 @UseGuards(AuthGuard)
 @Controller('products')

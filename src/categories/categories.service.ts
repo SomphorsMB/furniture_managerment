@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ProductDetail } from 'src/product-details/entities/product-detail.entity';
+import { ProductSupplier } from 'src/product-suppliers/entities/product-supplier.entity';
+import { Product } from 'src/products/entities/product.entity';
 import { CategoryRepository } from './categories.repository';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -16,18 +19,23 @@ export class CategoriesService {
           .execute();
   }
 
-  findAll() {
-    return this._categoryRepository
-          .createQueryBuilder()
-          .getMany();
+  async findAll() {
+    const categories = await this._categoryRepository.createQueryBuilder('category')
+                            .leftJoinAndMapMany('category.products', Product, 'product', 'product.categoryId = category.id')
+                            .leftJoinAndMapMany('product.detail', ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+                            .leftJoinAndMapMany('productDetail.supplier', ProductSupplier, 'supplier','productDetail.supplierId = supplier.id')
+                            .getMany();
+    return categories;
   }
 
-  findOne(id: number) {
-    return this._categoryRepository
-          .createQueryBuilder('category')
-          .select(['category'])
-          .where('category.id=:id',{id:id})
-          .getOne();
+  async findOne(id: number) {
+    const category = await this._categoryRepository.createQueryBuilder('category')
+                            .leftJoinAndMapMany('category.products', Product, 'product', 'product.categoryId = category.id')
+                            .leftJoinAndMapMany('product.detail', ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+                            .leftJoinAndMapMany('productDetail.supplier', ProductSupplier, 'supplier','productDetail.supplierId = supplier.id')
+                            .where('category.id=:id',{id:id})
+                            .getOne();
+    return category;
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto):Promise<any> {
