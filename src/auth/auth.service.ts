@@ -17,7 +17,7 @@ export class AuthService {
     const user = await this._usersService.findUserByEmail(payload.email);
     const isMatch = !await bcrypt.compare(payload.password, user.password)
     if (!user || isMatch) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException('Invalid credentials');
     }
     return true;
   }

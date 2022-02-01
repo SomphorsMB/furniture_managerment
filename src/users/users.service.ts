@@ -23,11 +23,7 @@ export class UsersService {
   }
 
   async findUserByEmail(email: string): Promise<any> {
-    const user = await this.usersRespository.findOne({ email });
-    if (!user) {
-      throw new BadRequestException('User not found')
-    }
-    return user;
+    return await this.usersRespository.findOne({ email });
   }
 
   update(userId: string, updateUserDto: UpdateUserDto) {
