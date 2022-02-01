@@ -42,7 +42,7 @@ export class ProductSuppliersController {
         message: "Something went wrong",
         error: error
       });
-    });;
+    });
   }
 
   @UseGuards(RolesGuard)
