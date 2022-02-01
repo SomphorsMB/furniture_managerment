@@ -1,9 +1,10 @@
 import { IsAlpha, IsNotEmpty, IsNumberString, MinLength } from "class-validator";
 import { ProductSupplier } from "src/product-suppliers/entities/product-supplier.entity";
+import { Product } from "src/products/entities/product.entity";
 
 export class CreateProductDetailDto {
     @IsNotEmpty()
-    readonly product:number
+    readonly product:Product
 
     @IsNotEmpty()
     readonly supplier:ProductSupplier

@@ -3,12 +3,12 @@ import { IsAlpha, IsMobilePhone, IsNotEmpty, MaxLength, MinLength } from "class-
 export class CreateSellerDto {
     @IsNotEmpty()
     @MinLength(2)
-    @MaxLength(20)
+    @MaxLength(100)
     readonly firstName:string;
 
     @IsNotEmpty()
     @MinLength(2)
-    @MaxLength(20)
+    @MaxLength(100)
     readonly lastName:string;
 
     @IsNotEmpty()
