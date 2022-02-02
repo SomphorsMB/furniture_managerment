@@ -15,7 +15,7 @@ export class ProductSoldsController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER, Role.SELLER)
-  @Post('create')
+  @Post()
   createProductSold(@Body() createProductSoldDto: CreateProductSoldDto,@Res() res:Response) {
     this.productSoldsService.create(createProductSoldDto).then(()=>{
       return res.status(201).json({message:"Product sold created successfully!"});
@@ -55,7 +55,7 @@ export class ProductSoldsController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
-  @Patch('update/:id')
+  @Patch(':id')
   async updateProductSold(@Param('id') id: string, @Body() updateProductSoldDto: UpdateProductSoldDto,@Res() res:Response) {
     this.productSoldsService.findOne(+id).then((result)=> {
       if(result){

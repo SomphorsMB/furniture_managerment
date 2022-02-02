@@ -1,15 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ProductSupplier } from "src/product-suppliers/entities/product-supplier.entity";
+import { Product } from "src/products/entities/product.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ProductDetail {
     @PrimaryGeneratedColumn()
     id:number;
-
-    @Column()
-    product:number
-
-    @Column()
-    productSupplier:number
 
     @Column()
     avatar:string
@@ -28,4 +24,12 @@ export class ProductDetail {
     
     @Column()
     price:number;
+
+    @ManyToOne(()=> Product, product=> product.product_detail, {onDelete:'CASCADE'})
+    @JoinColumn()
+    product: Product;
+
+    @ManyToOne(()=> ProductSupplier, productSupplier=> productSupplier.product_detail, {onDelete:'CASCADE'})
+    @JoinColumn()
+    supplier: ProductSupplier;
 }

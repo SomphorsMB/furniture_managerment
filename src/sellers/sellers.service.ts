@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Category } from 'src/categories/entities/category.entity';
+import { ProductDetail } from 'src/product-details/entities/product-detail.entity';
+import { ProductSold } from 'src/product-solds/entities/product-sold.entity';
+import { ProductSupplier } from 'src/product-suppliers/entities/product-supplier.entity';
+import { Product } from 'src/products/entities/product.entity';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
 import { Seller } from './entities/seller.entity';
@@ -17,18 +22,27 @@ export class SellersService {
         .execute();
   }
 
-  findAll() {
-    return this._sellerRepository
-    .createQueryBuilder()
-    .getMany();
+  async findAll() {
+    const sellers = await this._sellerRepository.createQueryBuilder('seller')
+                            .leftJoinAndMapMany('seller.product_sold', ProductSold, 'productSold', 'seller.id = productSold.sellerId')
+                            .leftJoinAndMapMany('productSold.product', Product, 'product', 'product.id = productSold.productId')
+                            .leftJoinAndMapMany('product.detail', ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+                            .leftJoinAndMapMany('productDetail.supplier', ProductSupplier, 'supplier','productDetail.supplierId = supplier.id')
+                            .leftJoinAndMapMany('product.category', Category, 'category','product.categoryId = category.id')
+                            .getMany();
+    return sellers;
   }
 
-  findOne(id: number) {
-    return this._sellerRepository
-      .createQueryBuilder('seller')
-      .select(['seller'])
-      .where('seller.id=:id',{id:id})
-      .getOne();
+  async findOne(id: number) {
+    const seller = await this._sellerRepository.createQueryBuilder('seller')
+                          .leftJoinAndMapMany('seller.product_sold', ProductSold, 'productSold', 'seller.id = productSold.sellerId')
+                          .leftJoinAndMapMany('productSold.product', Product, 'product', 'product.id = productSold.productId')
+                          .leftJoinAndMapMany('product.detail', ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+                          .leftJoinAndMapMany('productDetail.supplier', ProductSupplier, 'supplier','productDetail.supplierId = supplier.id')
+                          .leftJoinAndMapMany('product.category', Category, 'category','product.categoryId = category.id')
+                          .where('seller.id=:id',{id:id})
+                          .getOne();
+    return seller;
   }
 
   update(id: number, updateSellerDto: UpdateSellerDto) {

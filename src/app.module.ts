@@ -19,6 +19,8 @@ import { ProductDetail } from './product-details/entities/product-detail.entity'
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './authorization/role.guard';
+import { DiscountModule } from './discount/discount.module';
+import { Discount } from './discount/entities/discount.entity';
 
 
 @Module({
@@ -31,10 +33,10 @@ import { RolesGuard } from './authorization/role.guard';
     database: process.env.DB_NAME,
     timezone: process.env.DB_Time,
     synchronize: true,
-    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold,ProductDetail],
+    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold,ProductDetail, Discount],
   }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule, ProductDetailsModule,AuthModule,MulterModule.register({
     dest:'./files',
-  })],
+  }), DiscountModule],
   controllers: [],
   providers: [],
 })

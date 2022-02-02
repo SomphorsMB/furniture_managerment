@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, TableForeignKey } from "typeorm";
+import { Category } from "src/categories/entities/category.entity";
+import { ProductDetail } from "src/product-details/entities/product-detail.entity";
+import { ProductSold } from "src/product-solds/entities/product-sold.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableForeignKey } from "typeorm";
 
 @Entity()
 export class Product {
@@ -8,9 +11,15 @@ export class Product {
     @Column()
     name: string;
 
-    // @TableForeignKey()
-    @Column()
-    category_id: number;
+    @ManyToOne(()=> Category, category=> category.product, {onDelete:'CASCADE'})
+    @JoinColumn()
+    category: Category;
+
+    @OneToMany(()=> ProductSold, productSold=> productSold.product)
+    product_sold: ProductSold[];
+
+    @OneToMany(()=> ProductDetail, productDetail=> productDetail.product)
+    product_detail: ProductDetail[];
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP(6)' })
     created_at: Date;

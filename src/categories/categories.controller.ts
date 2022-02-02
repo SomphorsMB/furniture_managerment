@@ -15,7 +15,7 @@ export class CategoriesController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
-  @Post('create')
+  @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto, @Res() res:Response) {
     const isCategoryExist = await this.categoriesService.checkCategory(createCategoryDto.name);
     if(isCategoryExist) {
@@ -59,7 +59,7 @@ export class CategoriesController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
-  @Patch('update/:id')
+  @Patch(':id')
   async updateCategory(@Param('id',ParseIntPipe) id: string, @Body() updateCategoryDto: UpdateCategoryDto,@Res() res:Response) {
     const isCategoryExist = await this.categoriesService.checkCategory(updateCategoryDto.name);
     this.categoriesService.findOne(+id).then(result=>{

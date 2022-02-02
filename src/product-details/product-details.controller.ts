@@ -11,7 +11,7 @@ import { Response } from 'express';
 export class ProductDetailsController {
   constructor(private readonly productDetailsService: ProductDetailsService) {}
 
-  @Post('create')
+  @Post()
   @UseInterceptors(FileInterceptor('avatar',{
     storage: diskStorage ({
       destination:'./files',
@@ -63,7 +63,7 @@ export class ProductDetailsController {
     });
   }
 
-  @Patch('update/:id')
+  @Patch(':id')
   @UseInterceptors(FileInterceptor('avatar',{
     storage: diskStorage ({
       destination:'./files',

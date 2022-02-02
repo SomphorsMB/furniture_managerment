@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/authorization/role.guard';
 import { Roles } from 'src/authorization/role.decorator';
 import { Role } from 'src/authorization/role.enum';
+import { Product } from './entities/product.entity';
 
 @UseGuards(AuthGuard)
 @Controller('products')
@@ -19,6 +20,7 @@ export class ProductsController {
   create(@Body() createProductDto: CreateProductDto, @Res() res:Response) {
     this.productsService.create(createProductDto).then(() => {
         res.status(201).json({
+          message: "Product created succussfully"
         })
     }).catch(error => {
       res.status(500).json({
