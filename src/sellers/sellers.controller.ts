@@ -36,7 +36,7 @@ export class SellersController {
   }
 
   @UseGuards(RolesGuard)
-  @Roles(Role.MANAGER, Role.SELLER)
+  @Roles(Role.MANAGER)
   @Get()
   findAllSeller(@Res() res:Response) {
     this.sellersService.findAll().then(result=>{
@@ -47,7 +47,7 @@ export class SellersController {
   }
 
   @UseGuards(RolesGuard)
-  @Roles(Role.MANAGER, Role.SELLER)
+  @Roles(Role.MANAGER)
   @Get(':id')
   findOneSeller(@Param('id',ParseIntPipe) id: string,@Res() res:Response) {
     this.sellersService.findOne(+id).then(result =>{
