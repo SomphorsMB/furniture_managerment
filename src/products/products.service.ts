@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/categories/entities/category.entity';
+import { Discount } from 'src/discount/entities/discount.entity';
 import { ProductDetail } from 'src/product-details/entities/product-detail.entity';
 import { ProductSupplier } from 'src/product-suppliers/entities/product-supplier.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -21,22 +22,34 @@ export class ProductsService {
   }
 
   async findAll(): Promise<Product[]> {
-    const products = await this._productRepository.createQueryBuilder('product')
-                            .leftJoinAndMapMany('product.detail', ProductDetail, 'productDetail', 'product.id = productDetail.productId')
-                            .leftJoinAndMapMany('productDetail.supplier', ProductSupplier, 'supplier','productDetail.supplierId = supplier.id')
-                            .leftJoinAndMapMany('product.category', Category, 'category','product.categoryId = category.id')
-                            .getMany();
-    return products;
+    return await this._productRepository
+        .createQueryBuilder('product')
+        .select('product')
+        .addSelect('productDetail')
+        .addSelect('supplier')
+        .addSelect('category') 
+        .addSelect('discount') 
+        .innerJoin(ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+        .innerJoin(ProductSupplier, 'supplier', 'productDetail.supplierId = supplier.id')
+        .innerJoin(Category, 'category', 'category.id = product.categoryId')
+        .leftJoin(Discount, 'discount', 'productDetail.id = discount.productId')
+        .getRawMany()
   }
 
   async findOne(id: number) {
-    const product = await this._productRepository.createQueryBuilder('product')
-                            .leftJoinAndMapMany('product.detail', ProductDetail, 'productDetail', 'product.id = productDetail.productId')
-                            .leftJoinAndMapMany('productDetail.supplier', ProductSupplier, 'supplier','productDetail.supplierId = supplier.id')
-                            .leftJoinAndMapMany('product.category', Category, 'category','product.categoryId = category.id')
-                            .where('product.id = :id', { id: id})
-                            .getOne();
-   return product;
+    return await this._productRepository
+        .createQueryBuilder('product')
+        .select('product')
+        .addSelect('productDetail')
+        .addSelect('supplier')
+        .addSelect('category') 
+        .addSelect('discount') 
+        .innerJoin(ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+        .innerJoin(ProductSupplier, 'supplier', 'productDetail.supplierId = supplier.id')
+        .innerJoin(Category, 'category', 'category.id = product.categoryId')
+        .leftJoin(Discount, 'discount', 'productDetail.id = discount.productId')
+        .where('product.id = '+ id) 
+        .getRawMany()
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
