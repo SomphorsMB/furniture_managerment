@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, BadRequestException,UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, BadRequestException,UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProductSuppliersService } from './product-suppliers.service';
 import { CreateProductSupplierDto } from './dto/create-product-supplier.dto';
 import { UpdateProductSupplierDto } from './dto/update-product-supplier.dto';
@@ -7,6 +7,9 @@ import { AuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/authorization/role.guard';
 import { Roles } from 'src/authorization/role.decorator';
 import { Role } from 'src/authorization/role.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName, imageFileFilter } from 'src/utils/file-uploading.utils';
 
 @UseGuards(AuthGuard)
 @Controller('product-suppliers')
@@ -16,17 +19,31 @@ export class ProductSuppliersController {
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
   @Post()
-  create(@Body() createProductSupplierDto: CreateProductSupplierDto, @Res() res: Response) {
-    this.productSuppliersService.create(createProductSupplierDto).then(result => {
+  @UseInterceptors(FileInterceptor('logo',{
+    storage: diskStorage ({
+      destination:'./files',
+      filename:editFileName
+    }),
+    fileFilter:imageFileFilter,
+  }))
+  create(@Body() createProductSupplierDto: CreateProductSupplierDto, @UploadedFile() file:any,@Res() res: Response) {
+    console.log(createProductSupplierDto);
+    if(file){
+      createProductSupplierDto.logo = file.filename;
+      this.productSuppliersService.create(createProductSupplierDto).then(result => {
         res.status(201).json({
           message: "Created Sucessfully"
         })
-    }).catch(error => {
-      res.status(500).json({
-        message: "Something went wrong",
-        error: error
+      }).catch(error => {
+        res.status(500).json({
+          message: "Something went wrong",
+          error: error
       });
     });
+    }else{
+      res.status(400).json({message:'Please select the photo!'});
+    }
+
   }
 
   @UseGuards(RolesGuard)
@@ -68,9 +85,19 @@ export class ProductSuppliersController {
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductSupplierDto: UpdateProductSupplierDto, @Res() res: Response) {
+  @UseInterceptors(FileInterceptor('logo',{
+    storage: diskStorage ({
+      destination:'./files',
+      filename:editFileName
+    }),
+    fileFilter:imageFileFilter,
+  }))
+  update(@Param('id') id: string, @Body() updateProductSupplierDto: UpdateProductSupplierDto, @UploadedFile() file:any,@Res() res: Response) {
+   
     this.productSuppliersService.findOne(+id).then(result => {
       if (result){
+        if(file) updateProductSupplierDto.logo = file.filename;
+        else updateProductSupplierDto.logo = result.logo;
         this.productSuppliersService.update(+id, updateProductSupplierDto).then(() => {
           res.status(201).json({
             message: "Updated Successfully"

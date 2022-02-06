@@ -7,7 +7,6 @@ export class CreateProductSupplierDto {
     @IsString()
     brand: string;
 
-
     @MinLength(5)
     @IsString()
     country: string;

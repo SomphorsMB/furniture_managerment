@@ -3,9 +3,6 @@ import { ProductDetail } from "src/product-details/entities/product-detail.entit
 
 export class CreateDiscountDto {
 
-    // @IsNotEmpty()
-    // readonly seller:Seller
-
     @IsNotEmpty()
     readonly product: ProductDetail
 

@@ -18,12 +18,14 @@ export class ProductsController {
   @Roles(Role.MANAGER)
   @Post()
   create(@Body() createProductDto: CreateProductDto, @Res() res:Response) {
-    this.productsService.create(createProductDto).then(() => {
-        res.status(201).json({
-          message: "Product created succussfully"
+    this.productsService.create(createProductDto).then((product) => {
+        return res.status(201).json({
+          message: "Product created succussfully",
+          productId:product.identifiers[0].id
+          
         })
     }).catch(error => {
-      res.status(500).json({
+      return res.status(500).json({
         message: "Something went wrong",
         product: error
       });

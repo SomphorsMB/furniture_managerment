@@ -6,7 +6,7 @@ export class Discount {
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
+    @Column({default:0})
     discount: number;
 
     @OneToOne(() => ProductDetail)

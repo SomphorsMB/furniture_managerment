@@ -72,10 +72,10 @@ export class ProductDetailsController {
     fileFilter:imageFileFilter,
   }))
   updateProductDetail(@Param('id') id: string, @Body() updateProductDetailDto: UpdateProductDetailDto,@UploadedFile() file:any,@Res() res:Response) {
-    if(file){
-      updateProductDetailDto.avatar=file.filename
       this.productDetailsService.findOne(+id).then((result)=> {
         if(result){
+          if(file) updateProductDetailDto.avatar=file.filename;
+          else updateProductDetailDto.avatar=result.avatar;
           this.productDetailsService.update(+id,updateProductDetailDto).then(()=>{
             return res.status(201).json({message:'Updated product detail successfully!'});
           }).catch(error=>{
@@ -88,23 +88,6 @@ export class ProductDetailsController {
           return res.status(404).json({message:'Product detail not found!'});
         }
       });
-    }else{
-      this.productDetailsService.findOne(+id).then((result)=> {
-        if(result){
-          updateProductDetailDto.avatar=result.avatar;
-          this.productDetailsService.update(+id,updateProductDetailDto).then(()=>{
-            return res.status(201).json({message:'Updated product detail successfully!'});
-          }).catch(error=>{
-            return res.status(500).json({
-              message:'Something went wrong!',
-              error:error
-            });
-          })
-        }else{
-          return res.status(404).json({message:'Product detail not found!'});
-        }
-      });
-    }
   }
 
   @Delete(':id')
