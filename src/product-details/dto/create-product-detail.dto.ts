@@ -27,9 +27,8 @@ export class CreateProductDetailDto {
 
     @IsNotEmpty()
     @MinLength(2)
-    @IsAlpha()
     readonly rawMaterial:string;
-    
+
     @IsNotEmpty()
     @IsNumberString()
     readonly price:number;
