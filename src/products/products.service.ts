@@ -27,12 +27,13 @@ export class ProductsService {
         .select('product')
         .addSelect('productDetail')
         .addSelect('supplier')
-        .addSelect('category') 
-        .addSelect('discount') 
+        .addSelect('category')
+        .addSelect('discount')
         .innerJoin(ProductDetail, 'productDetail', 'product.id = productDetail.productId')
         .innerJoin(ProductSupplier, 'supplier', 'productDetail.supplierId = supplier.id')
         .innerJoin(Category, 'category', 'category.id = product.categoryId')
         .leftJoin(Discount, 'discount', 'productDetail.id = discount.productId')
+        .orderBy("productDetail.id", "DESC")
         .getRawMany()
   }
 
@@ -42,13 +43,30 @@ export class ProductsService {
         .select('product')
         .addSelect('productDetail')
         .addSelect('supplier')
-        .addSelect('category') 
-        .addSelect('discount') 
+        .addSelect('category')
+        .addSelect('discount')
         .innerJoin(ProductDetail, 'productDetail', 'product.id = productDetail.productId')
         .innerJoin(ProductSupplier, 'supplier', 'productDetail.supplierId = supplier.id')
         .innerJoin(Category, 'category', 'category.id = product.categoryId')
         .leftJoin(Discount, 'discount', 'productDetail.id = discount.productId')
-        .where('product.id = '+ id) 
+        .where('product.id = '+ id)
+        .orderBy("productDetail.id", "DESC")
+        .getRawMany()
+  }
+
+  async getProductDiscount(): Promise<Product[]> {
+    return await this._productRepository
+        .createQueryBuilder('product')
+        .select('product')
+        .addSelect('productDetail')
+        .addSelect('supplier')
+        .addSelect('category')
+        .addSelect('discount')
+        .innerJoin(ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+        .innerJoin(ProductSupplier, 'supplier', 'productDetail.supplierId = supplier.id')
+        .innerJoin(Category, 'category', 'category.id = product.categoryId')
+        .innerJoin(Discount, 'discount', 'productDetail.id = discount.productId')
+        .orderBy("discount.id", "DESC")
         .getRawMany()
   }
 
