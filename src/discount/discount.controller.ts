@@ -6,6 +6,9 @@ import { Response } from 'express';
 import { Roles } from 'src/authorization/role.decorator';
 import { Role } from 'src/authorization/role.enum';
 import { RolesGuard } from 'src/authorization/role.guard';
+import { AuthGuard } from 'src/auth/jwt-auth.guard';
+
+@UseGuards(AuthGuard)
 @Controller('discount')
 export class DiscountController {
   constructor(private readonly discountService: DiscountService) {}
