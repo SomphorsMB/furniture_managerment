@@ -49,7 +49,7 @@ export class ProductsController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER, Role.SELLER)
-  @Get(':id')
+  @Get('oneProduct/:id')
   findOne(@Param('id') id: string, @Res() res:Response) {
     this.productsService.findOne(+id).then(result => {
       if(result){
@@ -65,6 +65,21 @@ export class ProductsController {
           error: err
       })
   });
+  }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
+  @Get('/product-discount')
+  findProductDiscount(@Res() res:Response) {
+    this.productsService.getProductDiscount().then(result => {
+      return res.status(200).json({
+        data: result
+      })
+    }).catch(error=> {
+      return res.status(500).json({
+        message: "Something went wrong",
+      });
+    });
   }
 
   @UseGuards(RolesGuard)
