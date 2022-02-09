@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Res, UseGuards, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -8,11 +8,25 @@ import { RolesGuard } from 'src/authorization/role.guard';
 import { Roles } from 'src/authorization/role.decorator';
 import { Role } from 'src/authorization/role.enum';
 import { Product } from './entities/product.entity';
+import { Pagination } from 'nestjs-typeorm-paginate';
 
 @UseGuards(AuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
+
+  @Get('')
+  async index(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(2), ParseIntPipe) limit: number = 10
+  ): Promise<Pagination<Product>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.productsService.findAll({
+      page,
+      limit,
+      route: 'http://localhost:5000/api/products/'
+    })
+  }
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
@@ -22,7 +36,7 @@ export class ProductsController {
         return res.status(201).json({
           message: "Product created succussfully",
           productId:product.identifiers[0].id
-          
+
         })
     }).catch(error => {
       return res.status(500).json({
@@ -32,20 +46,20 @@ export class ProductsController {
     });
     }
 
-  @UseGuards(RolesGuard)
-  @Roles(Role.MANAGER, Role.SELLER)
-  @Get()
-  findAll(@Res() res:Response) {
-    this.productsService.findAll().then(result => {
-      return res.status(200).json({
-        data: result
-      })
-    }).catch(error=> {
-      return res.status(500).json({
-        message: "Something went wrong",
-      });
-    });
-  }
+  // @UseGuards(RolesGuard)
+  // @Roles(Role.MANAGER, Role.SELLER)
+  // @Get()
+  // findAll(@Res() res:Response) {
+  //   this.productsService.findAll().then(result => {
+  //     return res.status(200).json({
+  //       data: result
+  //     })
+  //   }).catch(error=> {
+  //     return res.status(500).json({
+  //       message: "Something went wrong",
+  //     });
+  //   });
+  // }
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER, Role.SELLER)
@@ -104,7 +118,7 @@ export class ProductsController {
       });
       }
     })
-    
+
   }
 
   @UseGuards(RolesGuard)
