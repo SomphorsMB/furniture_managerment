@@ -98,7 +98,7 @@ export class ProductsController {
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto, @Res() res: Response) {
     this.productsService.findOne(+id).then(result => {
       if (result){

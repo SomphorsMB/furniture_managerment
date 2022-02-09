@@ -19,7 +19,7 @@ export class SellersController {
   @Post()
   async createSeller(@Body() createSellerDto: CreateSellerDto, @Res() res:Response) {
     const isSellerExist = await this.sellersService.checkSeller(createSellerDto);
-    const isPhoneExist = await this.sellersService.checkPhone(createSellerDto.phone);
+    const isPhoneExist = await this.sellersService.checkPhone(0,createSellerDto.phone);
     if(isSellerExist){
       return res.status(409).json({message:'Seller already exist!'});
     }else if(isPhoneExist){
@@ -66,7 +66,7 @@ export class SellersController {
   @Patch(':id')
   async updateSeller(@Param('id',ParseIntPipe) id: string, @Body() updateSellerDto: UpdateSellerDto,@Res() res:Response) {
     const isSellerExist = await this.sellersService.checkSeller(updateSellerDto);
-    const isPhoneExist = await this.sellersService.checkPhone(updateSellerDto.phone);
+    const isPhoneExist = await this.sellersService.checkPhone(+id,updateSellerDto.phone);
     this.sellersService.findOne(+id).then(result=>{
       if(result){
         if(isSellerExist){

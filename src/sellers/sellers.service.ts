@@ -74,11 +74,12 @@ export class SellersService {
 
   }
 
-  checkPhone(phone:string){
+  checkPhone(id:number,phone:string){
     return this._sellerRepository
           .createQueryBuilder()
           .select()
           .where('phone=:phone',{phone:phone})
+          .andWhere('id!=:id',{id:id})
           .getOne();
 
   }
