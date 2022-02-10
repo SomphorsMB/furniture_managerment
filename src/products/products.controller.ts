@@ -18,13 +18,26 @@ export class ProductsController {
   @Get('')
   async index(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-    @Query('limit', new DefaultValuePipe(2), ParseIntPipe) limit: number = 10
+    @Query('limit', new DefaultValuePipe(12), ParseIntPipe) limit: number = 10
   ): Promise<Pagination<Product>> {
     limit = limit > 100 ? 100 : limit;
     return this.productsService.findAll({
       page,
       limit,
       route: 'http://localhost:5000/api/products/'
+    })
+  }
+
+  @Get('discount-products')
+  async productDiscount(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(12), ParseIntPipe) limit: number = 10
+  ): Promise<Pagination<Product>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.productsService.findProductDiscount({
+      page,
+      limit,
+      route: 'http://localhost:5000/api/products/discount-products/'
     })
   }
 
@@ -46,20 +59,20 @@ export class ProductsController {
     });
     }
 
-  // @UseGuards(RolesGuard)
-  // @Roles(Role.MANAGER, Role.SELLER)
-  // @Get()
-  // findAll(@Res() res:Response) {
-  //   this.productsService.findAll().then(result => {
-  //     return res.status(200).json({
-  //       data: result
-  //     })
-  //   }).catch(error=> {
-  //     return res.status(500).json({
-  //       message: "Something went wrong",
-  //     });
-  //   });
-  // }
+  @UseGuards(RolesGuard)
+  @Roles(Role.MANAGER, Role.SELLER)
+  @Get('getAll')
+  findAll(@Res() res:Response) {
+    this.productsService.findAllProduct().then(result => {
+      return res.status(200).json({
+        data: result
+      })
+    }).catch(error=> {
+      return res.status(500).json({
+        message: "Something went wrong",
+      });
+    });
+  }
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER, Role.SELLER)
