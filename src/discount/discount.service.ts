@@ -6,10 +6,19 @@ import { DiscountRepository } from './discount.repository';
 import { CreateDiscountDto } from './dto/create-discount.dto';
 import { UpdateDiscountDto } from './dto/update-discount.dto';
 import { Discount } from './entities/discount.entity';
+import { Pagination, IPaginationOptions, paginateRaw } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class DiscountService {
   constructor(private readonly _discountRepository:DiscountRepository){}
+
+  async findAll(options: IPaginationOptions): Promise<Pagination<Discount>> {
+    const queryBuilder = this._discountRepository.createQueryBuilder('discount')
+                            .innerJoinAndMapMany('supplier.detail', ProductDetail, 'productDetail', 'productDetail.id = discount.id')
+                            .innerJoinAndMapMany('productDetail.product', Product, 'product', 'product.id = productDetail.productId')
+                            .innerJoinAndMapOne('product.category', Category, 'category','category.id = product.categoryId')
+    return paginateRaw(queryBuilder, options)
+  }
 
   create(createDiscountDto: CreateDiscountDto) {
     return this._discountRepository
@@ -19,12 +28,12 @@ export class DiscountService {
           .execute();
   }
 
-  async findAll() {
+  async findAllDiscount() {
     const productsdiscount = await this._discountRepository.createQueryBuilder('discount')
                             .innerJoinAndMapMany('supplier.detail', ProductDetail, 'productDetail', 'productDetail.id = discount.id')
                             .innerJoinAndMapMany('productDetail.product', Product, 'product', 'product.id = productDetail.productId')
                             .innerJoinAndMapOne('product.category', Category, 'category','category.id = product.categoryId')
-                            .getMany();
+                            .getRawMany();
     return productsdiscount;
   }
 

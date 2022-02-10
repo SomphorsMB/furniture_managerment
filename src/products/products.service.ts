@@ -37,21 +37,21 @@ export class ProductsService {
       .execute();
   }
 
-  // async findAll(): Promise<Product[]> {
-  //   return await this._productRepository
-  //       .createQueryBuilder('product')
-  //       .select('product')
-  //       .addSelect('productDetail')
-  //       .addSelect('supplier')
-  //       .addSelect('category')
-  //       .addSelect('discount')
-  //       .innerJoin(ProductDetail, 'productDetail', 'product.id = productDetail.productId')
-  //       .innerJoin(ProductSupplier, 'supplier', 'productDetail.supplierId = supplier.id')
-  //       .innerJoin(Category, 'category', 'category.id = product.categoryId')
-  //       .leftJoin(Discount, 'discount', 'productDetail.id = discount.productId')
-  //       .orderBy("productDetail.id", "DESC")
-  //       .getRawMany()
-  // }
+  async findAllProduct(): Promise<Product[]> {
+    return await this._productRepository
+        .createQueryBuilder('product')
+        .select('product')
+        .addSelect('productDetail')
+        .addSelect('supplier')
+        .addSelect('category')
+        .addSelect('discount')
+        .innerJoin(ProductDetail, 'productDetail', 'product.id = productDetail.productId')
+        .innerJoin(ProductSupplier, 'supplier', 'productDetail.supplierId = supplier.id')
+        .innerJoin(Category, 'category', 'category.id = product.categoryId')
+        .leftJoin(Discount, 'discount', 'productDetail.id = discount.productId')
+        .orderBy("productDetail.id", "DESC")
+        .getRawMany()
+  }
 
   async findOne(id: number) {
     return await this._productRepository
