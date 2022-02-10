@@ -21,6 +21,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './authorization/role.guard';
 import { DiscountModule } from './discount/discount.module';
 import { Discount } from './discount/entities/discount.entity';
+import { ProductCartModule } from './product-cart/product-cart.module';
+import { ProductCart } from './product-cart/entities/product-cart.entity';
 
 
 @Module({
@@ -33,10 +35,10 @@ import { Discount } from './discount/entities/discount.entity';
     database: process.env.DB_NAME,
     timezone: process.env.DB_Time,
     synchronize: true,
-    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold,ProductDetail, Discount],
+    entities: [User, ProductSupplier, Product,Category,Seller,ProductSold,ProductDetail, Discount, ProductCart],
   }), UsersModule, ProductSuppliersModule, ProductsModule,CategoriesModule, SellersModule,SellersModule, ProductSoldsModule, ProductDetailsModule,AuthModule,MulterModule.register({
     dest:'./files',
-  }), DiscountModule],
+  }), DiscountModule, ProductCartModule],
   controllers: [],
   providers: [],
 })
