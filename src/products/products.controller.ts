@@ -28,6 +28,19 @@ export class ProductsController {
     })
   }
 
+  @Get('discount-products')
+  async productDiscount(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(12), ParseIntPipe) limit: number = 10
+  ): Promise<Pagination<Product>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.productsService.findProductDiscount({
+      page,
+      limit,
+      route: 'http://localhost:5000/api/products/discount-products/'
+    })
+  }
+
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
   @Post()

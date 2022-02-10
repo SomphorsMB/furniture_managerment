@@ -15,19 +15,6 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 export class DiscountController {
   constructor(private readonly discountService: DiscountService) {}
 
-  @Get('')
-  async index(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-    @Query('limit', new DefaultValuePipe(12), ParseIntPipe) limit: number = 10
-  ): Promise<Pagination<Discount>> {
-    limit = limit > 100 ? 100 : limit;
-    return this.discountService.findAll({
-      page,
-      limit,
-      route: 'http://localhost:5000/api/discount/'
-    })
-  }
-
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER)
   @Post()

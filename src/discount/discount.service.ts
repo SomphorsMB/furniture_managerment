@@ -11,15 +11,7 @@ import { Pagination, IPaginationOptions, paginateRaw } from 'nestjs-typeorm-pagi
 @Injectable()
 export class DiscountService {
   constructor(private readonly _discountRepository:DiscountRepository){}
-
-  async findAll(options: IPaginationOptions): Promise<Pagination<Discount>> {
-    const queryBuilder = this._discountRepository.createQueryBuilder('discount')
-                            .innerJoinAndMapMany('supplier.detail', ProductDetail, 'productDetail', 'productDetail.id = discount.id')
-                            .innerJoinAndMapMany('productDetail.product', Product, 'product', 'product.id = productDetail.productId')
-                            .innerJoinAndMapOne('product.category', Category, 'category','category.id = product.categoryId')
-    return paginateRaw(queryBuilder, options)
-  }
-
+  
   create(createDiscountDto: CreateDiscountDto) {
     return this._discountRepository
           .createQueryBuilder()
