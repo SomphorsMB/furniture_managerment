@@ -90,4 +90,18 @@ export class ProductCartController {
       })
   });
   }
+
+  @Delete()
+  deleteAll( @Res() res: Response) {
+    this.productCartService.deleteAll().then(() => {
+      res.status(201).json({
+        message: "Deleted Successfully"
+      })
+    }).catch(error => {
+      res.status(500).json({
+          message: "Something went wrong",
+          error: error
+      })
+  });
+  }
 }

@@ -62,4 +62,12 @@ export class ProductCartService {
       .where('id=:id',{id:id})
       .execute();
   }
+
+  deleteAll(){
+    return this._productCateRepository
+      .createQueryBuilder()
+      .delete()
+      .from(ProductCart)
+      .execute();
+  }
 }

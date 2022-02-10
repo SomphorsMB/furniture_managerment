@@ -13,4 +13,8 @@ export class CreateProductSoldDto {
     @IsNotEmpty()
     @IsNumberString()
     readonly unit:number
+
+    @IsNotEmpty()
+    @IsNumberString()
+    readonly discount:number
 }
