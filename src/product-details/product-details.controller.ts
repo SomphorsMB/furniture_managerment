@@ -37,7 +37,6 @@ export class ProductDetailsController {
 
   @Get('image/:imagpath')
   seeUploadFile(@Param('imagpath') imagpath:string, @Res() res){
-    console.log(imagpath);
     return res.sendFile(imagpath,{root:'./files'});
   }
 

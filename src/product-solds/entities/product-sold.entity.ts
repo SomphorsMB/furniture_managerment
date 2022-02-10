@@ -6,7 +6,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 export class ProductSold {
     @PrimaryGeneratedColumn()
     id:number
-    
+
     @ManyToOne(()=> Seller, seller=> seller.product_sold, {onDelete:'CASCADE'})
     @JoinColumn()
     seller:Seller
@@ -17,6 +17,9 @@ export class ProductSold {
 
     @Column()
     unit:number
+
+    @Column()
+    discount: number
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     readonly created_at: Date;

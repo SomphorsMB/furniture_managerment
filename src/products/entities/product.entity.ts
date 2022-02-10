@@ -11,14 +11,14 @@ export class Product {
     @Column()
     name: string;
 
-    @ManyToOne(()=> Category, category=> category.product, {onDelete:'CASCADE'})
+    @ManyToOne(()=> Category, category=> category.product, {onDelete:'CASCADE', eager: true})
     @JoinColumn()
     category: Category;
 
-    @OneToMany(()=> ProductSold, productSold=> productSold.product)
+    @OneToMany(()=> ProductSold, productSold=> productSold.product, { eager: true })
     product_sold: ProductSold[];
 
-    @OneToMany(()=> ProductDetail, productDetail=> productDetail.product)
+    @OneToMany(()=> ProductDetail, productDetail=> productDetail.product, { eager: true })
     product_detail: ProductDetail[];
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP(6)' })

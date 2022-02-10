@@ -9,7 +9,7 @@ export class Discount {
     @Column({default:0})
     discount: number;
 
-    @OneToOne(() => ProductDetail)
+    @OneToOne(() => ProductDetail,{onDelete: "CASCADE"})
     @JoinColumn()
     product: ProductDetail
 
