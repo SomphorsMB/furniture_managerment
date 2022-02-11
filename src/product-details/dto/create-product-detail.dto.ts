@@ -21,12 +21,10 @@ export class CreateProductDetailDto {
     readonly unit:number;
 
     @IsNotEmpty()
-    @MinLength(3)
     @IsAlpha()
     readonly color:string;
 
     @IsNotEmpty()
-    @MinLength(2)
     readonly rawMaterial:string;
 
     @IsNotEmpty()

@@ -15,11 +15,14 @@ export class AuthService {
 
   async validateUser(payload: LoginDto): Promise<any> {
     const user = await this._usersService.findUserByEmail(payload.email);
-    const isMatch = !await bcrypt.compare(payload.password, user.password)
-    if (!user || isMatch) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (user) {
+      const isMatch = !await bcrypt.compare(payload.password, user.password);
+      if (isMatch) {
+        throw new UnauthorizedException('Invalid Credentials');
+      }
+    } else {
+      throw new UnauthorizedException('Invalid Credentials');
     }
-    return true;
   }
 
   async login(payload: LoginDto) {
