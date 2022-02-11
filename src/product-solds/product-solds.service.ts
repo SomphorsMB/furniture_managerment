@@ -25,8 +25,8 @@ export class ProductSoldsService {
     return await this._productSoldRepository
         .createQueryBuilder('productSold')
         .select('productSold')
-        .select('seller')
-        .select('product')
+        .addSelect('seller')
+        .addSelect('product')
         .addSelect('productDetail')
         .addSelect('supplier')
         .addSelect('category') 
