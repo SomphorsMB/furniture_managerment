@@ -8,11 +8,12 @@ import { RolesGuard } from 'src/authorization/role.guard';
 import { Roles } from 'src/authorization/role.decorator';
 import { Role } from 'src/authorization/role.enum';
 import { Seller } from 'src/sellers/entities/seller.entity';
+import { ProductDetailsService } from 'src/product-details/product-details.service';
 
 @UseGuards(AuthGuard)
 @Controller('product-solds')
 export class ProductSoldsController {
-  constructor(private readonly productSoldsService: ProductSoldsService) {}
+  constructor(private readonly productSoldsService: ProductSoldsService, private readonly productDetailService: ProductDetailsService) {}
 
   @UseGuards(RolesGuard)
   @Roles(Role.MANAGER, Role.SELLER)
@@ -20,18 +21,27 @@ export class ProductSoldsController {
   createProductSold(@Param('sellerId') sellerId: Seller,@Body() createProductSoldDtoArray: CreateProductSoldDto[],@Res() res:Response) {
     for (let prodoctSold of createProductSoldDtoArray){
       let discount: number = 0;
-      console.log(prodoctSold["discount_discount"])
       if (prodoctSold["discount_discount"] != null){
         discount = prodoctSold["discount_discount"]
       }
-      // let createProductSoldDto = new CreateProductSoldDto({ seller: parseInt(sellerId), product: parseInt(prodoctSold["product_id"]), unit: parseInt(prodoctSold["productCart_unit"]), discount: discount})
+      this.productDetailService.update(prodoctSold['productDetail_id'], {
+          product: prodoctSold['product_id'],
+          supplier: prodoctSold['supplier_id'],
+          size: prodoctSold['productDetail_size'],
+          unit: prodoctSold['productDetail_unit']-prodoctSold['productCart_unit'],
+          color: prodoctSold['productDetail_color'],
+          rawMaterial: prodoctSold['productDetail_rawMaterial'],
+          price: prodoctSold['productDetail_price'],
+        })
       this.productSoldsService.create({ seller: sellerId, product: prodoctSold["product_id"], unit: prodoctSold["productCart_unit"], discount: discount}).then(()=>{
-        return res.status(201).json({message:"Product sold created successfully!"});
+        res.status(201).json({message:"Product sold created successfully!"});
       }).catch(error=>{
-        return res.set(500).json({
+        res.set(500).json({
           message:"Something went wrong!",
-          ProductSold:error
+          ProdoctSold:error
         });
+      
+        
       });
     }
     
